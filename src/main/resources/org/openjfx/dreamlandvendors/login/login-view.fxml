@@ -28,7 +28,7 @@
                   </VBox>
                   <VBox alignment="BOTTOM_LEFT" spacing="10.0" VBox.vgrow="NEVER">
                      <children>
-                        <Text styleClass="sidebar-footer" text="© 2025 Dream Land Supermarket" />
+                        <Text styleClass="sidebar-footer" text="© 2025 Dream Land Shopping" />
                      </children>
                      <padding>
                         <Insets bottom="20.0" left="20.0" right="20.0" />
