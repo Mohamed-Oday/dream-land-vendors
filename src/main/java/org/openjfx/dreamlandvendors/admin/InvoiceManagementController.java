@@ -83,7 +83,12 @@ public class InvoiceManagementController implements Initializable {
     private TableColumn<Invoice, BigDecimal> amountDueColumn;
 
     @FXML
-    private TableColumn<Invoice, Boolean> statusColumn;    @FXML
+    private TableColumn<Invoice, Boolean> statusColumn;
+
+    @FXML
+    private TableColumn<Invoice, String> receiptColumn;
+
+    @FXML
     private HBox alertBox;
 
     @FXML
@@ -101,6 +106,9 @@ public class InvoiceManagementController implements Initializable {
     @FXML
     private Text pendingAmountText;
 
+    @FXML
+    private ComboBox<String> filterVendorComboBox;
+
     private ObservableList<Invoice> invoiceList = FXCollections.observableArrayList();
     private FilteredList<Invoice> filteredInvoices;
     private Invoice currentInvoice;
@@ -111,9 +119,13 @@ public class InvoiceManagementController implements Initializable {
 
     // Directory to store receipt images
     private final String RECEIPTS_DIR = "receipts";
+    private Path receiptsBasePath;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        // Initialize receipts directory
+        createReceiptsDirectory();
+
         // Initialize date picker with current date
         dateField.setValue(LocalDate.now());
 
@@ -122,6 +134,35 @@ public class InvoiceManagementController implements Initializable {
         dateColumn.setCellValueFactory(new PropertyValueFactory<>("creationDate"));
         totalAmountColumn.setCellValueFactory(new PropertyValueFactory<>("totalAmount"));
         amountDueColumn.setCellValueFactory(new PropertyValueFactory<>("amountDue"));
+
+        // Set up receipt column
+        receiptColumn.setCellValueFactory(new PropertyValueFactory<>("receiptImagePath"));
+        receiptColumn.setCellFactory(column -> new TableCell<>() {
+            private final Button viewButton = new Button("View");
+            
+            {
+                viewButton.getStyleClass().add("receipt-button");
+                viewButton.setOnAction(event -> {
+                    Invoice invoice = getTableView().getItems().get(getIndex());
+                    handleViewReceipt(invoice);
+                });
+            }
+
+            @Override
+            protected void updateItem(String receiptPath, boolean empty) {
+                super.updateItem(receiptPath, empty);
+                viewButton.getStyleClass().removeAll("has-receipt", "no-receipt");
+                if (empty || receiptPath == null || receiptPath.isEmpty()) {
+                    setGraphic(null);
+                    setText(null);
+                    viewButton.getStyleClass().add("no-receipt");
+                } else {
+                    viewButton.getStyleClass().add("has-receipt");
+                    viewButton.setText("View");
+                    setGraphic(viewButton);
+                }
+            }
+        });
 
         // Custom cell factories for vendor name and status
         vendorColumn.setCellValueFactory(cellData -> {
@@ -184,7 +225,7 @@ public class InvoiceManagementController implements Initializable {
                 if (empty || amount == null) {
                     setText(null);
                 } else {
-                    setText("$" + amount.toString());
+                    setText(amount.toString() + " DZD");
                 }
             }
         });
@@ -196,84 +237,30 @@ public class InvoiceManagementController implements Initializable {
                 if (empty || amount == null) {
                     setText(null);
                 } else {
-                    setText("$" + amount.toString());
+                    setText(amount.toString() + " DZD");
                 }
             }
         });
 
-        // Set up search functionality
+        // Set up vendor filter combo box
+        filterVendorComboBox.setItems(FXCollections.observableArrayList("All"));
+        try {
+            filterVendorComboBox.getItems().addAll(
+                vendorService.getAllVendors().stream().map(Vendor::getName).toList()
+            );
+        } catch (SQLException e) {
+            // Optionally log or show alert
+        }
+        filterVendorComboBox.setValue("All");
+
+        // Set up filtered list for invoices
         filteredInvoices = new FilteredList<>(invoiceList, p -> true);
-        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
-            filteredInvoices.setPredicate(invoice -> {
-                // If filter text is empty, display all invoices
-                if (newValue == null || newValue.isEmpty()) {
-                    return true;
-                }
-
-                String lowerCaseFilter = newValue.toLowerCase();
-
-                // Match by vendor name
-                if (invoice.getVendor() != null && invoice.getVendor().getName().toLowerCase().contains(lowerCaseFilter)) {
-                    return true;
-                }
-
-                // Match by invoice ID
-                if (String.valueOf(invoice.getInvoiceId()).contains(lowerCaseFilter)) {
-                    return true;
-                }
-
-                return false;
-            });
-        });
-
-        // Set up filter combo box
-        ObservableList<String> filterOptions = FXCollections.observableArrayList(
-                "All", "Paid", "Unpaid", "Partially Paid"
-        );
-        filterComboBox.setItems(filterOptions);
-        filterComboBox.setValue("All");
-
-        filterComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
-            filteredInvoices.setPredicate(invoice -> {
-                // Apply text filter
-                String searchText = searchField.getText();
-                boolean matchesSearch = true;
-
-                if (searchText != null && !searchText.isEmpty()) {
-                    String lowerCaseFilter = searchText.toLowerCase();
-
-                    // Match by vendor name
-                    if (invoice.getVendor() != null && invoice.getVendor().getName().toLowerCase().contains(lowerCaseFilter)) {
-                        // Match
-                    } else if (String.valueOf(invoice.getInvoiceId()).contains(lowerCaseFilter)) {
-                        // Match
-                    } else {
-                        matchesSearch = false;
-                    }
-                }
-
-                // If doesn't match search text, no need to check status
-                if (!matchesSearch) {
-                    return false;
-                }
-
-                // Apply status filter
-                if ("All".equals(newValue)) {
-                    return true;
-                } else if ("Paid".equals(newValue)) {
-                    return invoice.isPaid() || invoice.getAmountDue().compareTo(BigDecimal.ZERO) == 0;
-                } else if ("Unpaid".equals(newValue)) {
-                    return !invoice.isPaid() && invoice.getAmountDue().compareTo(invoice.getTotalAmount()) == 0;
-                } else if ("Partially Paid".equals(newValue)) {
-                    return !invoice.isPaid() && invoice.getAmountDue().compareTo(BigDecimal.ZERO) > 0
-                            && invoice.getAmountDue().compareTo(invoice.getTotalAmount()) < 0;
-                }
-
-                return true;
-            });
-        });
-
         invoiceTable.setItems(filteredInvoices);
+
+        // Set up listeners for search, status, and vendor filter
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> updateInvoiceFilter());
+        filterComboBox.valueProperty().addListener((observable, oldValue, newValue) -> updateInvoiceFilter());
+        filterVendorComboBox.valueProperty().addListener((observable, oldValue, newValue) -> updateInvoiceFilter());
 
         // Add selection listener to populate form when an invoice is selected
         invoiceTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
@@ -293,8 +280,12 @@ public class InvoiceManagementController implements Initializable {
         // Load invoices from the database
         loadInvoices();
 
-        // Create receipts directory if it doesn't exist
-        createReceiptsDirectory();
+        // Set up status filter combo box
+        ObservableList<String> filterOptions = FXCollections.observableArrayList(
+            "All", "Paid", "Unpaid", "Partially Paid"
+        );
+        filterComboBox.setItems(filterOptions);
+        filterComboBox.setValue("All");
     }
 
     /**
@@ -302,12 +293,15 @@ public class InvoiceManagementController implements Initializable {
      */
     private void createReceiptsDirectory() {
         try {
-            Path path = Paths.get(RECEIPTS_DIR);
-            if (!Files.exists(path)) {
-                Files.createDirectories(path);
+            // Get the absolute path for the receipts directory
+            receiptsBasePath = Paths.get(RECEIPTS_DIR).toAbsolutePath();
+            if (!Files.exists(receiptsBasePath)) {
+                Files.createDirectories(receiptsBasePath);
             }
+            System.out.println("Receipts directory created at: " + receiptsBasePath);
         } catch (Exception e) {
             showAlert("Error creating receipts directory: " + e.getMessage(), "alert-error");
+            e.printStackTrace();
         }
     }
 
@@ -338,7 +332,9 @@ public class InvoiceManagementController implements Initializable {
             showAlert("Error loading vendors: " + e.getMessage(), "alert-error");
             e.printStackTrace();
         }
-    }    /**
+    }
+
+    /**
      * Load invoices from the database
      */
     private void loadInvoices() {
@@ -359,20 +355,17 @@ public class InvoiceManagementController implements Initializable {
         if (totalInvoicesText != null) {
             totalInvoicesText.setText(String.valueOf(invoiceList.size()));
         }
-        
         BigDecimal totalAmount = BigDecimal.ZERO;
         BigDecimal pendingAmount = BigDecimal.ZERO;
-        
         for (Invoice invoice : invoiceList) {
             totalAmount = totalAmount.add(invoice.getTotalAmount());
             pendingAmount = pendingAmount.add(invoice.getAmountDue());
         }
-        
         if (totalAmountText != null) {
-            totalAmountText.setText(String.format("$%.2f", totalAmount));
+            totalAmountText.setText(String.format("%.2f DZD", totalAmount));
         }
         if (pendingAmountText != null) {
-            pendingAmountText.setText(String.format("$%.2f", pendingAmount));
+            pendingAmountText.setText(String.format("%.2f DZD", pendingAmount));
         }
     }
 
@@ -408,11 +401,16 @@ public class InvoiceManagementController implements Initializable {
                 if (selectedFile != null) {
                     // Generate unique filename for the receipt
                     String uniqueFileName = UUID.randomUUID().toString() + getFileExtension(selectedFile.getName());
-                    Path destinationPath = Paths.get(RECEIPTS_DIR, uniqueFileName);
+                    // Create the full path including the RECEIPTS_DIR
+                    Path destinationPath = Paths.get(RECEIPTS_DIR, uniqueFileName).toAbsolutePath();
+
+                    // Create the receipts directory if it doesn't exist
+                    Files.createDirectories(Paths.get(RECEIPTS_DIR));
 
                     // Copy the file to the receipts directory
                     Files.copy(selectedFile.toPath(), destinationPath, StandardCopyOption.REPLACE_EXISTING);
 
+                    // Store the absolute path
                     imagePath = destinationPath.toString();
                 } else if (currentInvoice != null) {
                     // Keep existing image path when updating
@@ -431,7 +429,8 @@ public class InvoiceManagementController implements Initializable {
 
                     int invoiceId = invoiceService.createInvoice(invoice);
                     invoice.setInvoiceId(invoiceId);
-                    invoice.setVendor(selectedVendor);                    invoiceList.add(invoice);
+                    invoice.setVendor(selectedVendor);
+                    invoiceList.add(invoice);
                     updateStatistics();
 
                     showAlert("Invoice created successfully!", "alert-success");
@@ -482,7 +481,8 @@ public class InvoiceManagementController implements Initializable {
             confirmDialog.setContentText("Are you sure you want to delete this invoice?");
 
             confirmDialog.showAndWait().ifPresent(response -> {
-                if (response == ButtonType.OK) {                    try {
+                if (response == ButtonType.OK) {
+                    try {
                         invoiceService.deleteInvoice(currentInvoice.getInvoiceId());
                         invoiceList.remove(currentInvoice);
                         updateStatistics();
@@ -578,7 +578,9 @@ public class InvoiceManagementController implements Initializable {
         invoiceTable.getSelectionModel().clearSelection();
         saveButton.setText("Save Invoice");
         deleteButton.setDisable(true);
-    }    /**
+    }
+
+    /**
      * Show an alert message
      */
     private void showAlert(String message, String styleClass) {
@@ -622,5 +624,73 @@ public class InvoiceManagementController implements Initializable {
             return filename.substring(lastDotIndex);
         }
         return "";
+    }
+
+    /**
+     * Handles viewing the receipt for an invoice
+     * @param invoice The invoice whose receipt should be viewed
+     */
+    private void handleViewReceipt(Invoice invoice) {
+        if (invoice == null || invoice.getReceiptImagePath() == null || invoice.getReceiptImagePath().isEmpty()) {
+            showAlert("No receipt available for this invoice.", "alert-error");
+            return;
+        }
+
+        try {
+            Path receiptPath = Paths.get(invoice.getReceiptImagePath());
+            if (!Files.exists(receiptPath)) {
+                // Try relative to receipts base path
+                Path relativePath = receiptsBasePath.resolve(Paths.get(invoice.getReceiptImagePath()).getFileName());
+                if (!Files.exists(relativePath)) {
+                    showAlert("Receipt file not found at: " + receiptPath + " or " + relativePath, "alert-error");
+                    return;
+                }
+                receiptPath = relativePath;
+            }
+
+            // Open the receipt file with the default system application
+            java.awt.Desktop.getDesktop().open(receiptPath.toFile());
+        } catch (Exception e) {
+            showAlert("Error opening receipt: " + e.getMessage(), "alert-error");
+            e.printStackTrace();
+        }
+    }
+
+    private void updateInvoiceFilter() {
+        String searchText = searchField.getText();
+        String statusFilter = filterComboBox.getValue();
+        String vendorFilter = filterVendorComboBox.getValue();
+        
+        filteredInvoices.setPredicate(invoice -> {
+            boolean matchesSearch = true;
+            boolean matchesStatus = true;
+            boolean matchesVendor = true;
+
+            // Search by vendor name or invoice ID
+            if (searchText != null && !searchText.isEmpty()) {
+                String lowerCaseFilter = searchText.toLowerCase();
+                matchesSearch = (invoice.getVendor() != null && invoice.getVendor().getName().toLowerCase().contains(lowerCaseFilter))
+                        || String.valueOf(invoice.getInvoiceId()).contains(lowerCaseFilter);
+            }
+
+            // Filter by status
+            if (statusFilter != null && !statusFilter.equals("All")) {
+                if ("Paid".equals(statusFilter)) {
+                    matchesStatus = invoice.isPaid() || invoice.getAmountDue().compareTo(BigDecimal.ZERO) == 0;
+                } else if ("Unpaid".equals(statusFilter)) {
+                    matchesStatus = !invoice.isPaid() && invoice.getAmountDue().compareTo(invoice.getTotalAmount()) == 0;
+                } else if ("Partially Paid".equals(statusFilter)) {
+                    matchesStatus = !invoice.isPaid() && invoice.getAmountDue().compareTo(BigDecimal.ZERO) > 0
+                            && invoice.getAmountDue().compareTo(invoice.getTotalAmount()) < 0;
+                }
+            }
+
+            // Filter by vendor
+            if (vendorFilter != null && !vendorFilter.equals("All")) {
+                matchesVendor = invoice.getVendor() != null && vendorFilter.equals(invoice.getVendor().getName());
+            }
+
+            return matchesSearch && matchesStatus && matchesVendor;
+        });
     }
 }

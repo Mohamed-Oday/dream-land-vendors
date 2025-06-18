@@ -181,7 +181,6 @@
                         <TableColumn fx:id="paymentDateColumn" prefWidth="120.0" text="Date" styleClass="table-column-date" />
                         <TableColumn fx:id="paymentAmountColumn" prefWidth="140.0" text="Amount" styleClass="table-column-amount" />
                         <TableColumn fx:id="paymentMethodColumn" prefWidth="120.0" text="Method" styleClass="table-column-status" />
-                        <TableColumn fx:id="receiptColumn" prefWidth="100.0" text="Receipt" styleClass="table-column-action" />
                         <TableColumn fx:id="actionColumn" prefWidth="100.0" text="Action" styleClass="table-column-action" />
                      </columns>
                   </TableView>

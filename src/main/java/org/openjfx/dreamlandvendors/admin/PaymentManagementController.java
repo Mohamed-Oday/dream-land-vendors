@@ -2,6 +2,7 @@ package org.openjfx.dreamlandvendors.admin;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -45,7 +46,9 @@ public class PaymentManagementController implements Initializable {
     private Label statusLabel;
 
     @FXML
-    private DatePicker dateField;    @FXML
+    private DatePicker dateField;
+
+    @FXML
     private TextField amountField;
 
     @FXML
@@ -73,10 +76,9 @@ public class PaymentManagementController implements Initializable {
     private TableColumn<Payment, String> paymentMethodColumn;
 
     @FXML
-    private TableColumn<Payment, String> receiptColumn;
+    private TableColumn<Payment, Void> actionColumn;
 
     @FXML
-    private TableColumn<Payment, Void> actionColumn;    @FXML
     private HBox alertBox;
 
     @FXML
@@ -95,6 +97,7 @@ public class PaymentManagementController implements Initializable {
     private Text recentPaymentsText;
 
     private ObservableList<Payment> paymentList = FXCollections.observableArrayList();
+    private FilteredList<Payment> filteredPayments;
 
     private final VendorService vendorService = VendorService.getInstance();
     private final InvoiceService invoiceService = InvoiceService.getInstance();
@@ -109,8 +112,7 @@ public class PaymentManagementController implements Initializable {
         paymentIdColumn.setCellValueFactory(new PropertyValueFactory<>("paymentId"));
         paymentDateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
         paymentAmountColumn.setCellValueFactory(new PropertyValueFactory<>("amount"));
-        paymentMethodColumn.setCellValueFactory(new PropertyValueFactory<>("paymentMethod"));
-        receiptColumn.setCellValueFactory(new PropertyValueFactory<>("receiptPath"));
+        paymentMethodColumn.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty("Cash"));
 
         // Format date column
         paymentDateColumn.setCellFactory(column -> new TableCell<>() {
@@ -135,7 +137,7 @@ public class PaymentManagementController implements Initializable {
                 if (empty || amount == null) {
                     setText(null);
                 } else {
-                    setText("$" + amount.toString());
+                    setText(amount.toString() + " DZD");
                 }
             }
         });
@@ -168,7 +170,16 @@ public class PaymentManagementController implements Initializable {
         // Set up vendor combo box
         loadVendors();
 
-        // Set up listeners for combo boxes
+        // Set up filtered list for payments
+        filteredPayments = new FilteredList<>(paymentList, p -> true);
+        paymentsTable.setItems(filteredPayments);
+
+        // Set up search and vendor filter listeners
+        searchPaymentsField.textProperty().addListener((observable, oldValue, newValue) -> {
+            updatePaymentsFilter();
+        });
+
+        // Set up vendor combo box
         vendorComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 loadInvoicesForVendor(newValue.getVendorId());
@@ -182,7 +193,8 @@ public class PaymentManagementController implements Initializable {
             if (newValue != null) {
                 displayInvoiceDetails(newValue);
                 loadPaymentsForInvoice(newValue.getInvoiceId());
-                addPaymentButton.setDisable(false);            } else {
+                addPaymentButton.setDisable(false);
+            } else {
                 clearInvoiceDetails();
                 paymentList.clear();
                 addPaymentButton.setDisable(true);
@@ -234,7 +246,7 @@ public class PaymentManagementController implements Initializable {
                 public String toString(Invoice invoice) {
                     if (invoice == null) return "";
                     return "Invoice #" + invoice.getInvoiceId() + " - " +
-                           invoice.getCreationDate() + " - $" + invoice.getTotalAmount();
+                           invoice.getCreationDate() + " - " + invoice.getTotalAmount().toString() + " DZD";
                 }
 
                 @Override
@@ -252,8 +264,8 @@ public class PaymentManagementController implements Initializable {
      * Display invoice details
      */
     private void displayInvoiceDetails(Invoice invoice) {
-        totalAmountLabel.setText("$" + invoice.getTotalAmount().toString());
-        amountDueLabel.setText("$" + invoice.getAmountDue().toString());
+        totalAmountLabel.setText(invoice.getTotalAmount().toString() + " DZD");
+        amountDueLabel.setText(invoice.getAmountDue().toString() + " DZD");
 
         if (invoice.isPaid() || invoice.getAmountDue().compareTo(BigDecimal.ZERO) == 0) {
             statusLabel.setText("PAID");
@@ -296,36 +308,28 @@ public class PaymentManagementController implements Initializable {
      * Update payment statistics display
      */
     private void updateStatistics() {
-        try {
-            // Get all payments for statistics
-            List<Payment> allPayments = paymentService.getAllPayments();
-            
-            if (totalPaymentsText != null) {
-                totalPaymentsText.setText(String.valueOf(allPayments.size()));
-            }
-            
-            BigDecimal totalPaidAmount = BigDecimal.ZERO;
-            int recentPayments = 0;
-            LocalDate currentMonth = LocalDate.now().withDayOfMonth(1);
-            
-            for (Payment payment : allPayments) {
-                totalPaidAmount = totalPaidAmount.add(payment.getAmount());
-                if (payment.getDate().isAfter(currentMonth.minusDays(1))) {
-                    recentPayments++;
-                }
-            }
-            
-            if (totalPaidAmountText != null) {
-                totalPaidAmountText.setText(String.format("$%.2f", totalPaidAmount));
-            }
-            if (recentPaymentsText != null) {
-                recentPaymentsText.setText(String.valueOf(recentPayments));
-            }
-        } catch (SQLException e) {
-            // Silently handle error to avoid disrupting UI
-            System.err.println("Error updating statistics: " + e.getMessage());
+        // Only use the currently displayed paymentList (filtered for the selected invoice)
+        if (totalPaymentsText != null) {
+            totalPaymentsText.setText(String.valueOf(paymentList.size()));
         }
-    }    /**
+        BigDecimal totalPaidAmount = BigDecimal.ZERO;
+        int recentPayments = 0;
+        LocalDate currentMonth = LocalDate.now().withDayOfMonth(1);
+        for (Payment payment : paymentList) {
+            totalPaidAmount = totalPaidAmount.add(payment.getAmount());
+            if (payment.getDate().isAfter(currentMonth.minusDays(1))) {
+                recentPayments++;
+            }
+        }
+        if (totalPaidAmountText != null) {
+            totalPaidAmountText.setText(String.format("%.2f DZD", totalPaidAmount));
+        }
+        if (recentPaymentsText != null) {
+            recentPaymentsText.setText(String.valueOf(recentPayments));
+        }
+    }
+
+    /**
      * Handle add payment button action
      */
     @FXML
@@ -406,7 +410,13 @@ public class PaymentManagementController implements Initializable {
 
     /**
      * Handle browse receipt button click
-     */    /**
+     */
+    @FXML
+    void handleBrowseReceipt() {
+        // Implementation needed
+    }
+
+    /**
      * Handle clear payment form
      */
     @FXML
@@ -452,7 +462,9 @@ public class PaymentManagementController implements Initializable {
         }
 
         return true;
-    }    /**
+    }
+
+    /**
      * Show an alert message
      */
     private void showAlert(String message, String styleClass) {
@@ -485,5 +497,19 @@ public class PaymentManagementController implements Initializable {
         }
         
         alertBox.setVisible(true);
+    }
+
+    private void updatePaymentsFilter() {
+        String searchText = searchPaymentsField.getText();
+        filteredPayments.setPredicate(payment -> {
+            boolean matchesSearch = true;
+            // Search by payment ID or amount
+            if (searchText != null && !searchText.isEmpty()) {
+                String lowerCaseFilter = searchText.toLowerCase();
+                matchesSearch = String.valueOf(payment.getPaymentId()).contains(lowerCaseFilter)
+                        || (payment.getAmount() != null && payment.getAmount().toString().contains(lowerCaseFilter));
+            }
+            return matchesSearch;
+        });
     }
 }

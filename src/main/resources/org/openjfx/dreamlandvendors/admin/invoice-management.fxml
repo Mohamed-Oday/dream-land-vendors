@@ -68,10 +68,14 @@
       </HBox>
 
       <!-- Main Content Grid -->
-      <HBox spacing="32.0" VBox.vgrow="ALWAYS">
+      <GridPane VBox.vgrow="ALWAYS" hgap="24.0">
+         <columnConstraints>
+            <ColumnConstraints minWidth="400.0" maxWidth="400.0" />
+            <ColumnConstraints hgrow="ALWAYS" minWidth="400.0" />
+         </columnConstraints>
          <children>
             <!-- Enhanced Form Section -->
-            <VBox styleClass="modern-form-card" HBox.hgrow="NEVER" minWidth="420.0" maxWidth="450.0">
+            <VBox styleClass="modern-form-card" GridPane.columnIndex="0">
                <children>
                   <HBox alignment="CENTER_LEFT" spacing="12.0" styleClass="card-header">
                      <children>
@@ -85,13 +89,13 @@
                         <VBox styleClass="modern-form-group" spacing="8.0">
                            <children>
                               <Label styleClass="modern-form-label" text="Vendor" />
-                              <ComboBox fx:id="vendorComboBox" styleClass="modern-combo-box" prefWidth="Infinity" promptText="Select a vendor" />
+                              <ComboBox fx:id="vendorComboBox" styleClass="modern-combo-box" maxWidth="Infinity" promptText="Select a vendor" />
                            </children>
                         </VBox>
                         <VBox styleClass="modern-form-group" spacing="8.0">
                            <children>
                               <Label styleClass="modern-form-label" text="Invoice Date" />
-                              <DatePicker fx:id="dateField" styleClass="modern-date-picker" prefWidth="Infinity" promptText="Select date" />
+                              <DatePicker fx:id="dateField" styleClass="modern-date-picker" maxWidth="Infinity" promptText="Select date" />
                            </children>
                         </VBox>
                         <VBox styleClass="modern-form-group" spacing="8.0">
@@ -125,10 +129,12 @@
                      </children>
                   </VBox>
                </children>
-            </VBox>            <!-- Enhanced Invoice List Section -->
-            <VBox HBox.hgrow="ALWAYS" styleClass="modern-table-container">
+            </VBox>
+            
+            <!-- Enhanced Invoice List Section -->
+            <VBox styleClass="modern-table-container" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS">
                <children>
-                  <HBox alignment="CENTER_LEFT" spacing="16.0" styleClass="table-header">
+                  <HBox alignment="CENTER_LEFT" spacing="16.0" styleClass="card-header">
                      <children>
                         <HBox alignment="CENTER_LEFT" spacing="12.0">
                            <children>
@@ -139,6 +145,7 @@
                         <Region HBox.hgrow="ALWAYS" />
                         <HBox styleClass="search-container" spacing="8.0" alignment="CENTER_RIGHT">
                            <children>
+                              <ComboBox fx:id="filterVendorComboBox" styleClass="modern-filter-combo" promptText="Filter by vendor" />
                               <ComboBox fx:id="filterComboBox" styleClass="modern-filter-combo" promptText="Filter by status" />
                               <Text styleClass="search-icon" text="🔍" />
                               <TextField fx:id="searchField" styleClass="modern-search-field" promptText="Search invoices..." />
@@ -155,11 +162,12 @@
                         <TableColumn fx:id="totalAmountColumn" prefWidth="140.0" text="Total Amount" styleClass="table-column-amount" />
                         <TableColumn fx:id="amountDueColumn" prefWidth="140.0" text="Amount Due" styleClass="table-column-amount" />
                         <TableColumn fx:id="statusColumn" prefWidth="100.0" text="Status" styleClass="table-column-status" />
+                        <TableColumn fx:id="receiptColumn" prefWidth="100.0" text="Receipt" styleClass="table-column-action" />
                      </columns>
                   </TableView>
                </children>
             </VBox>
          </children>
-      </HBox>
+      </GridPane>
    </children>
 </VBox>

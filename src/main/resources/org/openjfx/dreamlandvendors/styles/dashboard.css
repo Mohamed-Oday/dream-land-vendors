@@ -733,3 +733,389 @@
     -fx-fill-width: true;
     -fx-vgrow: ALWAYS;
 }
+
+/* Enhanced Invoice Management Styles */
+.invoice-form-container {
+    -fx-spacing: 20px;
+}
+
+.invoice-form-row {
+    -fx-spacing: 24px;
+    -fx-alignment: center-left;
+}
+
+.invoice-field-group {
+    -fx-spacing: 8px;
+    -fx-min-width: 160px;
+    -fx-pref-width: 180px;
+}
+
+.invoice-field-group .modern-form-label {
+    -fx-font-weight: 600;
+    -fx-text-fill: #2d3436;
+    -fx-font-size: 14px;
+}
+
+.invoice-amount-field {
+    -fx-background-color: #f8f9fa;
+    -fx-background-radius: 8px;
+    -fx-border-color: #6c5ce7;
+    -fx-border-width: 1.5px;
+    -fx-border-radius: 8px;
+    -fx-padding: 12px 16px;
+    -fx-font-size: 14px;
+    -fx-text-fill: #2d3436;
+    -fx-font-weight: 600;
+}
+
+.invoice-amount-field:focused {
+    -fx-background-color: white;
+    -fx-border-color: #6c5ce7;
+    -fx-border-width: 2px;
+    -fx-effect: dropshadow(three-pass-box, rgba(108,92,231,0.25), 6, 0, 0, 0);
+}
+
+/* Enhanced Invoice Status Badges */
+.status-badge {
+    -fx-padding: 6px 12px;
+    -fx-background-radius: 12px;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-alignment: center;
+}
+
+.status-paid {
+    -fx-background-color: #d4edda;
+    -fx-text-fill: #155724;
+    -fx-border-color: #c3e6cb;
+    -fx-border-radius: 12px;
+    -fx-border-width: 1px;
+}
+
+.status-pending {
+    -fx-background-color: #fff3cd;
+    -fx-text-fill: #856404;
+    -fx-border-color: #ffeeba;
+    -fx-border-radius: 12px;
+    -fx-border-width: 1px;
+}
+
+.status-overdue {
+    -fx-background-color: #f8d7da;
+    -fx-text-fill: #721c24;
+    -fx-border-color: #f5c6cb;
+    -fx-border-radius: 12px;
+    -fx-border-width: 1px;
+}
+
+/* Enhanced Invoice Form Card */
+.modern-form-card {
+    -fx-background-color: white;
+    -fx-background-radius: 12px;
+    -fx-border-radius: 12px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 12, 0, 0, 0);
+    -fx-padding: 24px;
+    -fx-spacing: 20px;
+}
+
+.modern-form-card:hover {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.15), 14, 0, 0, 0);
+}
+
+/* Enhanced Table Container */
+.modern-table-container {
+    -fx-background-color: white;
+    -fx-background-radius: 12px;
+    -fx-border-radius: 12px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 12, 0, 0, 0);
+    -fx-padding: 24px;
+}
+
+.modern-table-container:hover {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.15), 14, 0, 0, 0);
+}
+
+/* Enhanced Table Styling */
+.modern-table {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.modern-table .column-header {
+    -fx-background-color: #f8f9fa;
+    -fx-padding: 16px 12px;
+    -fx-border-width: 0 0 2 0;
+    -fx-border-color: #e9ecef;
+}
+
+.modern-table .column-header .label {
+    -fx-text-fill: #495057;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+}
+
+.modern-table .table-row-cell {
+    -fx-background-color: transparent;
+    -fx-border-width: 0 0 1 0;
+    -fx-border-color: #f1f3f5;
+    -fx-padding: 8px 0;
+}
+
+.modern-table .table-row-cell:odd {
+    -fx-background-color: #f8f9fa;
+}
+
+.modern-table .table-row-cell:selected {
+    -fx-background-color: #e3f2fd;
+}
+
+.modern-table .table-row-cell:hover {
+    -fx-background-color: #e9ecef;
+}
+
+/* Enhanced Form Controls */
+.modern-combo-box, .modern-date-picker {
+    -fx-background-color: #f8f9fa;
+    -fx-background-radius: 8px;
+    -fx-border-color: #dee2e6;
+    -fx-border-radius: 8px;
+    -fx-border-width: 1.5px;
+    -fx-padding: 8px;
+}
+
+.modern-combo-box:focused, .modern-date-picker:focused {
+    -fx-background-color: white;
+    -fx-border-color: #6c5ce7;
+    -fx-border-width: 2px;
+    -fx-effect: dropshadow(three-pass-box, rgba(108,92,231,0.25), 6, 0, 0, 0);
+}
+
+.modern-text-field {
+    -fx-background-color: #f8f9fa;
+    -fx-background-radius: 8px;
+    -fx-border-color: #dee2e6;
+    -fx-border-radius: 8px;
+    -fx-border-width: 1.5px;
+    -fx-padding: 12px;
+}
+
+.modern-text-field:focused {
+    -fx-background-color: white;
+    -fx-border-color: #6c5ce7;
+    -fx-border-width: 2px;
+    -fx-effect: dropshadow(three-pass-box, rgba(108,92,231,0.25), 6, 0, 0, 0);
+}
+
+/* Enhanced Button Styling */
+.button-group {
+    -fx-spacing: 12px;
+    -fx-alignment: center-right;
+}
+
+.modern-primary-button {
+    -fx-background-color: #6c5ce7;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 12px 24px;
+    -fx-background-radius: 8px;
+    -fx-cursor: hand;
+    -fx-font-size: 14px;
+}
+
+.modern-primary-button:hover {
+    -fx-background-color: #5f4dd0;
+    -fx-effect: dropshadow(three-pass-box, rgba(108,92,231,0.3), 6, 0, 0, 0);
+}
+
+.modern-primary-button:pressed {
+    -fx-background-color: #4834d4;
+}
+
+.modern-secondary-button {
+    -fx-background-color: #f8f9fa;
+    -fx-text-fill: #495057;
+    -fx-font-weight: bold;
+    -fx-padding: 12px 24px;
+    -fx-background-radius: 8px;
+    -fx-border-color: #dee2e6;
+    -fx-border-radius: 8px;
+    -fx-cursor: hand;
+    -fx-font-size: 14px;
+}
+
+.modern-secondary-button:hover {
+    -fx-background-color: #e9ecef;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 4, 0, 0, 0);
+}
+
+.modern-secondary-button:pressed {
+    -fx-background-color: #dee2e6;
+}
+
+.modern-danger-button {
+    -fx-background-color: #ff7675;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 12px 24px;
+    -fx-background-radius: 8px;
+    -fx-cursor: hand;
+    -fx-font-size: 14px;
+}
+
+.modern-danger-button:hover {
+    -fx-background-color: #d63031;
+    -fx-effect: dropshadow(three-pass-box, rgba(255,118,117,0.3), 6, 0, 0, 0);
+}
+
+.modern-danger-button:pressed {
+    -fx-background-color: #b02525;
+}
+
+.modern-danger-button:disabled {
+    -fx-background-color: #fab1a0;
+    -fx-opacity: 0.7;
+}
+
+/* Enhanced Search and Filter Controls */
+.search-container {
+    -fx-spacing: 12px;
+    -fx-padding: 0 8px;
+}
+
+.modern-filter-combo {
+    -fx-background-color: #f8f9fa;
+    -fx-background-radius: 8px;
+    -fx-border-color: #dee2e6;
+    -fx-border-width: 1.5px;
+    -fx-border-radius: 8px;
+    -fx-padding: 8px 12px;
+    -fx-font-size: 14px;
+    -fx-min-width: 150px;
+}
+
+.modern-filter-combo:focused {
+    -fx-background-color: white;
+    -fx-border-color: #6c5ce7;
+    -fx-border-width: 2px;
+    -fx-effect: dropshadow(three-pass-box, rgba(108,92,231,0.25), 6, 0, 0, 0);
+}
+
+.modern-search-field {
+    -fx-background-color: #f8f9fa;
+    -fx-background-radius: 20px;
+    -fx-border-color: #dee2e6;
+    -fx-border-width: 1.5px;
+    -fx-border-radius: 20px;
+    -fx-padding: 8px 16px;
+    -fx-font-size: 14px;
+    -fx-pref-width: 250px;
+}
+
+.modern-search-field:focused {
+    -fx-background-color: white;
+    -fx-border-color: #6c5ce7;
+    -fx-border-width: 2px;
+    -fx-effect: dropshadow(three-pass-box, rgba(108,92,231,0.25), 6, 0, 0, 0);
+}
+
+/* Enhanced Header Stats */
+.stat-card {
+    -fx-background-color: white;
+    -fx-background-radius: 12px;
+    -fx-border-radius: 12px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 8, 0, 0, 0);
+    -fx-padding: 20px;
+    -fx-min-width: 180px;
+    -fx-alignment: center;
+}
+
+.stat-card:hover {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.15), 10, 0, 0, 0);
+    -fx-background-color: #fafafa;
+}
+
+.stat-number {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-fill: #6c5ce7;
+}
+
+.stat-label {
+    -fx-font-size: 14px;
+    -fx-fill: #6c757d;
+    -fx-font-weight: 600;
+}
+
+/* Receipt Button Styling */
+.receipt-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #6c5ce7;
+    -fx-font-size: 14px;
+    -fx-padding: 6px 12px;
+    -fx-background-radius: 4px;
+    -fx-border-radius: 4px;
+    -fx-cursor: hand;
+    -fx-graphic-text-gap: 8px;
+}
+
+.receipt-button:hover {
+    -fx-background-color: rgba(108, 92, 231, 0.1);
+}
+
+.receipt-button:pressed {
+    -fx-background-color: rgba(108, 92, 231, 0.2);
+}
+
+.receipt-button.has-receipt {
+    -fx-text-fill: #00b894;
+}
+
+.receipt-button.no-receipt {
+    -fx-text-fill: #b2bec3;
+    -fx-opacity: 0.7;
+}
+
+.receipt-icon {
+    -fx-fill: currentColor;
+    -fx-font-size: 16px;
+}
+
+/* Enhanced table action column */
+.table-column-action {
+    -fx-alignment: CENTER;
+}
+
+/* Enhanced Table Column Styling */
+.modern-table .table-column {
+    -fx-alignment: CENTER;
+}
+
+.table-column-id {
+    -fx-alignment: CENTER;
+}
+
+.table-column-name {
+    -fx-alignment: CENTER;
+}
+
+.table-column-date {
+    -fx-alignment: CENTER;
+}
+
+.table-column-amount {
+    -fx-alignment: CENTER;
+}
+
+.table-column-status {
+    -fx-alignment: CENTER;
+}
+
+.table-column-action {
+    -fx-alignment: CENTER;
+}
+
+/* Center text in table cells */
+.modern-table .table-cell {
+    -fx-alignment: CENTER;
+    -fx-padding: 8px 4px;
+}
