@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
+
+<VBox spacing="20.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.openjfx.dreamlandvendors.vendor.VendorProfileController">
+   <padding>
+      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+   </padding>
+   <children>
+      <!-- Header -->
+      <VBox styleClass="content-header">
+         <children>
+            <Text styleClass="page-title" text="My Profile" />
+            <Text styleClass="page-description" text="View your vendor information" />
+         </children>
+      </VBox>
+
+      <!-- Alert message area -->
+      <HBox fx:id="alertBox" styleClass="alert" visible="false">
+         <children>
+            <Label fx:id="alertMessage" text="Alert message" />
+         </children>
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
+      </HBox>
+
+      <!-- Profile Information -->
+      <VBox styleClass="card">
+         <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+         </padding>
+         <children>
+            <Text styleClass="card-title" text="Vendor Information" />
+            <GridPane hgap="15.0" vgap="15.0">
+               <padding>
+                  <Insets top="20.0" />
+               </padding>
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="200.0" minWidth="150.0" prefWidth="150.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="400.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <Label text="Vendor ID:" styleClass="form-label" />
+                  <Label text="Name:" styleClass="form-label" GridPane.rowIndex="1" />
+                  <Label text="Phone Number:" styleClass="form-label" GridPane.rowIndex="2" />
+
+                  <Label fx:id="vendorIdLabel" text="-" GridPane.columnIndex="1" />
+                  <Label fx:id="nameLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <Label fx:id="phoneLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+               </children>
+            </GridPane>
+         </children>
+      </VBox>
+
+      <!-- Account Information -->
+      <VBox styleClass="card">
+         <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+         </padding>
+         <children>
+            <Text styleClass="card-title" text="Account Information" />
+            <GridPane hgap="15.0" vgap="15.0">
+               <padding>
+                  <Insets top="20.0" />
+               </padding>
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="200.0" minWidth="150.0" prefWidth="150.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="400.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <Label text="Username:" styleClass="form-label" />
+                  <Label text="Full Name:" styleClass="form-label" GridPane.rowIndex="1" />
+
+                  <Label fx:id="usernameLabel" text="-" GridPane.columnIndex="1" />
+                  <Label fx:id="fullNameLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+               </children>
+            </GridPane>
+
+            <!-- Change Password Section -->
+            <VBox spacing="10.0">
+               <VBox.margin>
+                  <Insets top="30.0" />
+               </VBox.margin>
+               <children>
+                  <Text styleClass="card-subtitle" text="Change Password" />
+                  <GridPane hgap="15.0" vgap="15.0">
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="200.0" minWidth="150.0" prefWidth="150.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="400.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <Label text="Current Password:" styleClass="form-label" />
+                        <Label text="New Password:" styleClass="form-label" GridPane.rowIndex="1" />
+                        <Label text="Confirm Password:" styleClass="form-label" GridPane.rowIndex="2" />
+
+                        <PasswordField fx:id="currentPasswordField" GridPane.columnIndex="1" />
+                        <PasswordField fx:id="newPasswordField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <PasswordField fx:id="confirmPasswordField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                     </children>
+                  </GridPane>
+                  <HBox alignment="CENTER_RIGHT">
+                     <children>
+                        <Button fx:id="changePasswordButton" onAction="#handleChangePassword" text="Change Password" styleClass="primary-button" />
+                     </children>
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin>
+                  </HBox>
+               </children>
+            </VBox>
+         </children>
+      </VBox>
+   </children>
+</VBox>

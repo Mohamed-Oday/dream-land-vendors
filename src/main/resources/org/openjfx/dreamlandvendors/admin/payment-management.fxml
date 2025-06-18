@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
+
+<VBox spacing="24.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" 
+      fx:controller="org.openjfx.dreamlandvendors.admin.PaymentManagementController" 
+      styleClass="vendor-management-container">
+   <padding>
+      <Insets bottom="32.0" left="32.0" right="32.0" top="32.0" />
+   </padding>
+   <children>
+      <!-- Modern Header with enhanced styling -->
+      <VBox styleClass="modern-header">
+         <children>
+            <HBox alignment="CENTER_LEFT" spacing="16.0">
+               <children>
+                  <VBox>
+                     <children>
+                        <Text styleClass="modern-page-title" text="Payment Management" />
+                        <Text styleClass="modern-page-subtitle" text="Process and track vendor payments with comprehensive receipt management" />
+                     </children>
+                  </VBox>
+                  <Region HBox.hgrow="ALWAYS" />
+                  <HBox styleClass="header-stats" spacing="16.0">
+                     <children>
+                        <VBox styleClass="stat-card" alignment="CENTER">
+                           <children>
+                              <Text fx:id="totalPaymentsText" styleClass="stat-number" text="0" />
+                              <Text styleClass="stat-label" text="Total Payments" />
+                           </children>
+                        </VBox>
+                        <VBox styleClass="stat-card" alignment="CENTER">
+                           <children>
+                              <Text fx:id="totalPaidAmountText" styleClass="stat-number" text="0.00" />
+                              <Text styleClass="stat-label" text="Total Paid" />
+                           </children>
+                        </VBox>
+                        <VBox styleClass="stat-card" alignment="CENTER">
+                           <children>
+                              <Text fx:id="recentPaymentsText" styleClass="stat-number" text="0" />
+                              <Text styleClass="stat-label" text="Recent Payments" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+      
+      <!-- Modern Alert message area -->
+      <HBox fx:id="alertBox" styleClass="modern-alert" visible="false">
+         <children>
+            <VBox alignment="CENTER_LEFT" spacing="4.0">
+               <children>
+                  <HBox alignment="CENTER_LEFT" spacing="8.0">
+                     <children>
+                        <Text fx:id="alertIcon" styleClass="alert-icon" text="●" />
+                        <Label fx:id="alertMessage" styleClass="alert-text" text="Alert message" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </children>
+         <padding>
+            <Insets bottom="16.0" left="20.0" right="20.0" top="16.0" />
+         </padding>
+      </HBox>
+
+      <!-- Main Content Grid -->
+      <GridPane VBox.vgrow="ALWAYS" hgap="24.0">
+         <columnConstraints>
+            <ColumnConstraints minWidth="400.0" maxWidth="400.0" />
+            <ColumnConstraints hgrow="ALWAYS" minWidth="400.0" />
+         </columnConstraints>
+         <children>
+            <!-- Payment Processing Section -->
+            <VBox styleClass="modern-form-card" GridPane.columnIndex="0">
+               <children>
+                  <HBox alignment="CENTER_LEFT" spacing="12.0" styleClass="card-header">
+                     <children>
+                        <Text styleClass="card-icon" text="💳" />
+                        <Text styleClass="modern-card-title" text="Payment Processing" />
+                     </children>
+                  </HBox>
+                  
+                  <VBox styleClass="modern-form-container" spacing="20.0">
+                     <children>
+                        <VBox styleClass="modern-form-group" spacing="8.0">
+                           <children>
+                              <Label styleClass="modern-form-label" text="Vendor" />
+                              <ComboBox fx:id="vendorComboBox" styleClass="modern-combo-box" maxWidth="Infinity" promptText="Select a vendor" />
+                           </children>
+                        </VBox>
+                        <VBox styleClass="modern-form-group" spacing="8.0">
+                           <children>
+                              <Label styleClass="modern-form-label" text="Invoice" />
+                              <ComboBox fx:id="invoiceComboBox" styleClass="modern-combo-box" maxWidth="Infinity" promptText="Select an invoice" />
+                           </children>
+                        </VBox>
+                        <VBox styleClass="modern-form-group" spacing="12.0">
+                           <children>
+                              <Label styleClass="modern-form-label" text="Invoice Details" />
+                              <VBox styleClass="invoice-details-card" spacing="8.0">
+                                 <children>
+                                    <HBox alignment="CENTER_LEFT" spacing="12.0">
+                                       <children>
+                                          <Text styleClass="detail-label" text="Total Amount:" />
+                                          <Region HBox.hgrow="ALWAYS" />
+                                          <Label fx:id="totalAmountLabel" styleClass="detail-value amount-total" text="0.00" />
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" spacing="12.0">
+                                       <children>
+                                          <Text styleClass="detail-label" text="Amount Due:" />
+                                          <Region HBox.hgrow="ALWAYS" />
+                                          <Label fx:id="amountDueLabel" styleClass="detail-value amount-due" text="0.00" />
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" spacing="12.0">
+                                       <children>
+                                          <Text styleClass="detail-label" text="Status:" />
+                                          <Region HBox.hgrow="ALWAYS" />
+                                          <Label fx:id="statusLabel" styleClass="detail-value status-badge" text="Not Selected" />
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </VBox>
+                        <VBox styleClass="modern-form-group" spacing="8.0">
+                           <children>
+                              <Label styleClass="modern-form-label" text="Payment Date" />
+                              <DatePicker fx:id="dateField" styleClass="modern-date-picker" maxWidth="Infinity" promptText="Select date" />
+                           </children>
+                        </VBox>
+                        <VBox styleClass="modern-form-group" spacing="8.0">
+                           <children>
+                              <Label styleClass="modern-form-label" text="Payment Amount" />
+                              <TextField fx:id="amountField" styleClass="modern-text-field" promptText="Enter payment amount" />
+                           </children>
+                        </VBox>
+                        <HBox spacing="12.0" alignment="CENTER_RIGHT">
+                           <children>
+                              <Button fx:id="clearPaymentButton" onAction="#handleClearPayment" styleClass="modern-secondary-button" text="Clear" />
+                              <Button fx:id="addPaymentButton" onAction="#handleAddPayment" styleClass="modern-primary-button" text="Record Payment" disable="true" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+               </children>
+            </VBox>
+
+            <!-- Payment History Section -->
+            <VBox styleClass="modern-table-container" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS">
+               <children>
+                  <HBox alignment="CENTER_LEFT" spacing="16.0" styleClass="card-header">
+                     <children>
+                        <HBox alignment="CENTER_LEFT" spacing="12.0">
+                           <children>
+                              <Text styleClass="card-icon" text="📊" />
+                              <Text styleClass="modern-card-title" text="Payment History" />
+                           </children>
+                        </HBox>
+                        <Region HBox.hgrow="ALWAYS" />
+                        <HBox styleClass="search-container" spacing="8.0" alignment="CENTER_RIGHT">
+                           <children>
+                              <Text styleClass="search-icon" text="🔍" />
+                              <TextField fx:id="searchPaymentsField" styleClass="modern-search-field" promptText="Search payments..." />
+                           </children>
+                        </HBox>
+                     </children>
+                  </HBox>
+                  
+                  <TableView fx:id="paymentsTable" VBox.vgrow="ALWAYS" styleClass="modern-table">
+                     <columns>
+                        <TableColumn fx:id="paymentIdColumn" prefWidth="80.0" text="ID" styleClass="table-column-id" />
+                        <TableColumn fx:id="paymentDateColumn" prefWidth="120.0" text="Date" styleClass="table-column-date" />
+                        <TableColumn fx:id="paymentAmountColumn" prefWidth="140.0" text="Amount" styleClass="table-column-amount" />
+                        <TableColumn fx:id="paymentMethodColumn" prefWidth="120.0" text="Method" styleClass="table-column-status" />
+                        <TableColumn fx:id="receiptColumn" prefWidth="100.0" text="Receipt" styleClass="table-column-action" />
+                        <TableColumn fx:id="actionColumn" prefWidth="100.0" text="Action" styleClass="table-column-action" />
+                     </columns>
+                  </TableView>
+               </children>
+            </VBox>
+         </children>
+      </GridPane>
+   </children>
+</VBox>

@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
+
+<VBox spacing="24.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.openjfx.dreamlandvendors.admin.VendorManagementController" styleClass="vendor-management-container">
+   <padding>
+      <Insets bottom="32.0" left="32.0" right="32.0" top="32.0" />
+   </padding>
+   <children>
+      <!-- Modern Header with enhanced styling -->
+      <VBox styleClass="modern-header">
+         <children>
+            <HBox alignment="CENTER_LEFT" spacing="16.0">
+               <children>
+                  <VBox>
+                     <children>
+                        <Text styleClass="modern-page-title" text="Vendor Management" />
+                        <Text styleClass="modern-page-subtitle" text="Manage your vendor relationships and contact information" />
+                     </children>
+                  </VBox>
+                  <Region HBox.hgrow="ALWAYS" />
+                  <HBox styleClass="header-stats" spacing="16.0">
+                     <children>
+                        <VBox styleClass="stat-card" alignment="CENTER">
+                           <children>
+                              <Text fx:id="totalVendorsText" styleClass="stat-number" text="0" />
+                              <Text styleClass="stat-label" text="Total Vendors" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+               </children>
+            </HBox>
+         </children>
+      </VBox>      <!-- Modern Alert message area -->
+      <HBox fx:id="alertBox" styleClass="modern-alert" visible="false">
+         <children>
+            <VBox alignment="CENTER_LEFT" spacing="4.0">
+               <children>
+                  <HBox alignment="CENTER_LEFT" spacing="8.0">
+                     <children>
+                        <Text fx:id="alertIcon" styleClass="alert-icon" text="●" />
+                        <Label fx:id="alertMessage" styleClass="alert-text" text="Alert message" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </children>
+         <padding>
+            <Insets bottom="16.0" left="20.0" right="20.0" top="16.0" />
+         </padding>
+      </HBox>
+
+      <!-- Main Content Grid -->
+      <HBox spacing="32.0" VBox.vgrow="ALWAYS">
+         <children>
+            <!-- Enhanced Form Section -->
+            <VBox styleClass="modern-form-card" HBox.hgrow="NEVER" minWidth="400.0" maxWidth="420.0">
+               <children>
+                  <HBox alignment="CENTER_LEFT" spacing="12.0" styleClass="card-header">
+                     <children>
+                        <Text styleClass="card-icon" text="👤" />
+                        <Text styleClass="modern-card-title" text="Vendor Information" />
+                     </children>
+                  </HBox>
+                  
+                  <VBox styleClass="modern-form-container" spacing="20.0">
+                     <children>
+                        <VBox styleClass="modern-form-group" spacing="8.0">
+                           <children>
+                              <Label styleClass="modern-form-label" text="Vendor Name" />
+                              <TextField fx:id="nameField" styleClass="modern-text-field" promptText="Enter vendor name" />
+                           </children>
+                        </VBox>
+                        
+                        <VBox styleClass="modern-form-group" spacing="8.0">
+                           <children>
+                              <Label styleClass="modern-form-label" text="Phone Number" />
+                              <TextField fx:id="phoneField" styleClass="modern-text-field" promptText="Enter phone number" />
+                           </children>
+                        </VBox>
+                        
+                        <HBox spacing="12.0" styleClass="button-group">
+                           <children>
+                              <Button fx:id="saveButton" onAction="#handleSave" styleClass="modern-primary-button" text="Save Vendor" />
+                              <Button fx:id="clearButton" onAction="#handleClear" styleClass="modern-secondary-button" text="Clear" />
+                              <Button fx:id="deleteButton" onAction="#handleDelete" styleClass="modern-danger-button" text="Delete" disable="true" />
+                           </children>
+                           <VBox.margin>
+                              <Insets top="8.0" />
+                           </VBox.margin>
+                        </HBox>
+                     </children>
+                  </VBox>
+               </children>
+            </VBox>            <!-- Enhanced Vendor List Section -->
+            <VBox HBox.hgrow="ALWAYS" styleClass="modern-table-container">
+               <children>
+                  <HBox alignment="CENTER_LEFT" spacing="16.0" styleClass="table-header">
+                     <children>
+                        <HBox alignment="CENTER_LEFT" spacing="12.0">
+                           <children>
+                              <Text styleClass="table-icon" text="📋" />
+                              <Text styleClass="modern-card-title" text="Vendor Directory" />
+                           </children>
+                        </HBox>
+                        <Region HBox.hgrow="ALWAYS" />
+                        <HBox styleClass="search-container" spacing="8.0" alignment="CENTER_RIGHT">
+                           <children>
+                              <Text styleClass="search-icon" text="🔍" />
+                              <TextField fx:id="searchField" styleClass="modern-search-field" promptText="Search vendors..." />
+                           </children>
+                        </HBox>
+                     </children>
+                  </HBox>
+                  
+                  <TableView fx:id="vendorTable" VBox.vgrow="ALWAYS" styleClass="modern-table">
+                     <columns>
+                        <TableColumn fx:id="idColumn" prefWidth="80.0" text="ID" styleClass="table-column-id" />
+                        <TableColumn fx:id="nameColumn" prefWidth="250.0" text="Vendor Name" styleClass="table-column-name" />
+                        <TableColumn fx:id="phoneColumn" prefWidth="180.0" text="Phone Number" styleClass="table-column-phone" />
+                     </columns>
+                  </TableView>
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+   </children>
+</VBox>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="768.0" minWidth="1024.0" prefHeight="768.0" prefWidth="1024.0" stylesheets="@../styles/dashboard.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.openjfx.dreamlandvendors.vendor.VendorDashboardController">
+   <left>
+      <VBox prefWidth="250.0" styleClass="sidebar" BorderPane.alignment="CENTER">
+         <children>
+            <VBox styleClass="sidebar-header">
+               <children>
+                  <Text styleClass="sidebar-title" text="Dream Land Vendors" />
+                  <Text fx:id="userNameText" styleClass="sidebar-user" text="Welcome, Vendor" />
+               </children>
+            </VBox>
+            <Button fx:id="profileButton" mnemonicParsing="false" onAction="#showProfileView" prefWidth="Infinity" styleClass="nav-button" text="My Profile" />
+            <Button fx:id="invoicesButton" mnemonicParsing="false" onAction="#showInvoicesView" prefWidth="Infinity" styleClass="nav-button" text="My Invoices" />
+            <VBox VBox.vgrow="ALWAYS" />
+            <Button fx:id="logoutButton" mnemonicParsing="false" onAction="#handleLogout" prefWidth="Infinity" styleClass="nav-button" text="Logout" />
+         </children>
+      </VBox>
+   </left>
+   <center>
+      <StackPane fx:id="contentArea" BorderPane.alignment="CENTER">
+         <!-- Content pages will be loaded here dynamically -->
+      </StackPane>
+   </center>
+</BorderPane>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+
+<StackPane prefHeight="768.0" prefWidth="1024.0" stylesheets="@../styles/login.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.openjfx.dreamlandvendors.login.LoginController">
+   <children>
+      <BorderPane>
+         <left>
+            <VBox styleClass="sidebar" prefWidth="400.0" BorderPane.alignment="CENTER">
+               <children>
+                  <VBox alignment="CENTER" spacing="20.0" VBox.vgrow="ALWAYS">
+                     <children>
+                        <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <!-- Replace with your actual logo path -->
+                              <Image url="@../images/logo-placeholder.png" />
+                           </image>
+                        </ImageView>
+                        <Text styleClass="sidebar-title" text="Dream Land Vendors" />
+                        <Text styleClass="sidebar-subtitle" text="Payment Management System" />
+                     </children>
+                  </VBox>
+                  <VBox alignment="BOTTOM_LEFT" spacing="10.0" VBox.vgrow="NEVER">
+                     <children>
+                        <Text styleClass="sidebar-footer" text="© 2025 Dream Land Supermarket" />
+                     </children>
+                     <padding>
+                        <Insets bottom="20.0" left="20.0" right="20.0" />
+                     </padding>
+                  </VBox>
+               </children>
+            </VBox>
+         </left>
+         <center>
+            <VBox alignment="CENTER" styleClass="content-area" BorderPane.alignment="CENTER">
+               <children>
+                  <VBox fx:id="loginFormContainer" alignment="CENTER" maxWidth="400.0" spacing="25.0">
+                     <children>
+                        <Text styleClass="login-title" text="Welcome Back" />
+                        <Text styleClass="login-subtitle" text="Login to your account" />
+                        <Label fx:id="errorLabel" styleClass="error-label" text="Error message goes here" />
+                        <VBox spacing="5.0">
+                           <children>
+                              <Label text="Username" />
+                              <TextField fx:id="usernameField" promptText="Enter your username" />
+                           </children>
+                        </VBox>
+                        <VBox spacing="5.0">
+                           <children>
+                              <Label text="Password" />
+                              <PasswordField fx:id="passwordField" promptText="Enter your password" />
+                           </children>
+                        </VBox>
+                        <HBox alignment="CENTER_RIGHT">
+                           <children>
+                              <Hyperlink text="Forgot Password?" />
+                           </children>
+                        </HBox>
+                        <Button fx:id="loginButton" defaultButton="true" onAction="#handleLogin" prefHeight="40.0" prefWidth="Infinity" styleClass="login-button" text="Login" />
+                        <Button onAction="#handleExit" prefHeight="40.0" prefWidth="Infinity" styleClass="exit-button" text="Exit" />
+                     </children>
+                     <padding>
+                        <Insets bottom="20.0" left="40.0" right="40.0" top="20.0" />
+                     </padding>
+                  </VBox>
+               </children>
+            </VBox>
+         </center>
+      </BorderPane>
+   </children>
+</StackPane>
