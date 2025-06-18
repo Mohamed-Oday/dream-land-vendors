@@ -18,6 +18,7 @@
             <Button fx:id="vendorsButton" mnemonicParsing="false" onAction="#showVendorsView" prefWidth="Infinity" styleClass="nav-button" text="Vendors" />
             <Button fx:id="invoicesButton" mnemonicParsing="false" onAction="#showInvoicesView" prefWidth="Infinity" styleClass="nav-button" text="Invoices" />
             <Button fx:id="paymentsButton" mnemonicParsing="false" onAction="#showPaymentsView" prefWidth="Infinity" styleClass="nav-button" text="Payments" />
+            <Button fx:id="dailySpendingButton" mnemonicParsing="false" onAction="#showDailySpendingView" prefWidth="Infinity" styleClass="nav-button" text="Daily Spending" />
             <VBox VBox.vgrow="ALWAYS" />
             <Button fx:id="logoutButton" mnemonicParsing="false" onAction="#handleLogout" prefWidth="Infinity" styleClass="nav-button" text="Logout" />
          </children>

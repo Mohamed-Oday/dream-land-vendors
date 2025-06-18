@@ -5,6 +5,7 @@ import org.openjfx.dreamlandvendors.dao.impl.PaymentDAOImpl;
 import org.openjfx.dreamlandvendors.model.Payment;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -92,5 +93,22 @@ public class PaymentService {
      */
     public boolean deletePayment(int paymentId) throws SQLException {
         return paymentDAO.delete(paymentId);
+    }
+
+    /**
+     * Get payments for a specific date
+     * @param date the date to filter payments
+     * @return a list of payments for the date
+     * @throws SQLException if a database error occurs
+     */
+    public List<Payment> getPaymentsByDate(LocalDate date) throws SQLException {
+        List<Payment> allPayments = getAllPayments();
+        List<Payment> filtered = new java.util.ArrayList<>();
+        for (Payment payment : allPayments) {
+            if (payment.getDate() != null && payment.getDate().isEqual(date)) {
+                filtered.add(payment);
+            }
+        }
+        return filtered;
     }
 }

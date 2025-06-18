@@ -38,6 +38,9 @@ public class AdminDashboardController implements Initializable {
     @FXML
     private Button logoutButton;
 
+    @FXML
+    private Button dailySpendingButton;
+
     // Keep track of the active navigation button
     private Button activeButton;
 
@@ -85,6 +88,17 @@ public class AdminDashboardController implements Initializable {
     private void showPaymentsView() throws IOException {
         setActiveButton(paymentsButton);
         FXMLLoader loader = new FXMLLoader(getClass().getResource("payment-management.fxml"));
+        Parent view = loader.load();
+        setContent(view);
+    }
+
+    /**
+     * Show the daily spending view
+     */
+    @FXML
+    private void showDailySpendingView() throws IOException {
+        setActiveButton(dailySpendingButton);
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("daily-spending.fxml"));
         Parent view = loader.load();
         setContent(view);
     }
